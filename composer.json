@@ -13,7 +13,7 @@
         "php": ">=8.2",
         "illuminate/support": "^10.0 || ^11.0 || ^12.0 || ^13.0",
         "illuminate/database": "^10.0 || ^11.0 || ^12.0 || ^13.0",
-        "emericklaw/sql-anywhere-client": "^2.0.0"
+        "emericklaw/sql-anywhere-client": "^3.0.0"
     },
     "require-dev": {
         "orchestra/testbench": "3.7.*",
