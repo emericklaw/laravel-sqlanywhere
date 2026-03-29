@@ -8,6 +8,16 @@ use Illuminate\Database\Schema\Grammars\Grammar;
 
 class SQLAnywhereSchemaGrammar extends Grammar
 {
+    /**
+     * Create a new schema grammar instance.
+     *
+     * @param  \Illuminate\Database\Connection  $connection
+     * @return void
+     */
+    public function __construct($connection)
+    {
+        parent::__construct($connection);
+    }
 
     /**
      * The keyword identifier wrapper format.
@@ -26,11 +36,48 @@ class SQLAnywhereSchemaGrammar extends Grammar
     /**
      * Compile the query to determine if a table exists.
      *
+     * @param  string  $schema
+     * @param  string  $table
      * @return string
      */
-    public function compileTableExists()
+    public function compileTableExists($schema, $table)
     {
-        return 'SELECT * FROM sys.systab WHERE table_type_str = ?';
+        return 'SELECT * FROM sys.systab WHERE table_name = ?';
+    }
+
+    /**
+     * Compile the query to determine the list of columns.
+     *
+     * @param  string  $schema
+     * @param  string  $table
+     * @return string
+     */
+    public function compileColumnListing($schema, $table)
+    {
+        return 'SELECT column_name FROM sys.syscolumn c JOIN sys.systab t ON c.table_id = t.table_id WHERE t.table_name = ?';
+    }
+
+    /**
+     * Compile the query to get the column type definition.
+     *
+     * @param  string  $schema
+     * @param  string  $table
+     * @return string
+     */
+    public function compileColumns($schema, $table)
+    {
+        return "SELECT 
+            c.column_name, 
+            c.domain_name as type_name, 
+            c.width, 
+            c.scale, 
+            CASE WHEN c.nulls = 'Y' THEN 1 ELSE 0 END as nullable,
+            c.\"default\",
+            CASE WHEN c.pkey = 'Y' THEN 1 ELSE 0 END as auto_increment
+        FROM sys.syscolumn c 
+        JOIN sys.systab t ON c.table_id = t.table_id 
+        WHERE t.table_name = ?
+        ORDER BY c.column_id";
     }
 
     /**

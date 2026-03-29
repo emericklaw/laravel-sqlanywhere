@@ -124,7 +124,7 @@ class SQLAnywhereConnection extends Connection
      */
     protected function getDefaultQueryGrammar()
     {
-        return $this->withTablePrefix(new SQLAnywhereQueryGrammar);
+        return new SQLAnywhereQueryGrammar($this);
     }
 
     /**
@@ -134,6 +134,6 @@ class SQLAnywhereConnection extends Connection
      */
     protected function getDefaultSchemaGrammar()
     {
-        return $this->withTablePrefix(new SQLAnywhereSchemaGrammar);
+        return new SQLAnywhereSchemaGrammar($this);
     }
 }

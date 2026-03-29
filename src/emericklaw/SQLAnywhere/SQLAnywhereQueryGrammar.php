@@ -7,6 +7,16 @@ use Illuminate\Database\Query\Builder;
 
 class SQLAnywhereQueryGrammar extends Grammar
 {
+    /**
+     * Create a new query grammar instance.
+     *
+     * @param  \Illuminate\Database\Connection  $connection
+     * @return void
+     */
+    public function __construct($connection)
+    {
+        parent::__construct($connection);
+    }
 
     /**
      * The components that make up a select clause.
